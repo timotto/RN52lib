@@ -21,7 +21,6 @@
 
 #ifndef RN52_H_
 #define RN52_H_
-//#include <exception>
 #include <configuration.h>
 
 namespace RN52 {
@@ -52,6 +51,7 @@ public:
 
 protected:
 	void refreshState();
+	int queueCommand(const char *cmd);
 
 private:
 	Mode mode;
@@ -72,7 +72,6 @@ private:
 	const char *commandQueue[CMD_QUEUE_SIZE];
 	int commandQueuePos;
 
-	int queueCommand(const char *cmd);
 	void prepareCommandMode();
 	void prepareDataMode();
 	int parseCmdResponse(const char *data, int size);
