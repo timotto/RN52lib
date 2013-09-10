@@ -24,19 +24,19 @@
 
 const char *RN52_CMD_BEGIN = "CMD\r\n";
 const char *RN52_CMD_EXIT = "END\r\n";
-const char *RN52_CMD_QUERY = "Q\r\n";
-const char *RN52_CMD_DETAILS = "D\r\n";
-const char *RN52_CMD_RECONNECTLAST = "B,04\r\n";
-const char *RN52_CMD_DISCONNECT = "K,04\r\n";
+const char *RN52_CMD_QUERY = "Q\r";
+const char *RN52_CMD_DETAILS = "D\r";
+const char *RN52_CMD_RECONNECTLAST = "B,06\r";
+const char *RN52_CMD_DISCONNECT = "K,06\r";
 
-const char* RN52_CMD_RESET = "R,1\r\n";
-const char* RN52_CMD_AVCRP_VOLUP = "AV+\r\n";
-const char* RN52_CMD_AVCRP_VOLDOWN = "AV-\r\n";
-const char* RN52_CMD_AVCRP_NEXT = "AT+\r\n";
-const char* RN52_CMD_AVCRP_PREV = "AT-\r\n";
-const char* RN52_CMD_AVCRP_PLAYPAUSE = "AP\r\n";
-const char* RN52_CMD_DISCOVERY_ON = "Q,1\r\n";
-const char* RN52_CMD_DISCOVERY_OFF = "Q,0\r\n";
+const char* RN52_CMD_RESET = "R,1\r";
+const char* RN52_CMD_AVCRP_VOLUP = "AV+\r";
+const char* RN52_CMD_AVCRP_VOLDOWN = "AV-\r";
+const char* RN52_CMD_AVCRP_NEXT = "AT+\r";
+const char* RN52_CMD_AVCRP_PREV = "AT-\r";
+const char* RN52_CMD_AVCRP_PLAYPAUSE = "AP\r";
+const char* RN52_CMD_DISCOVERY_ON = "Q,1\r";
+const char* RN52_CMD_DISCOVERY_OFF = "Q,0\r";
 
 const char *RN52_RX_OK = "AOK\r\n";
 const char *RN52_RX_ERROR = "ERR\r\n";
