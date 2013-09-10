@@ -21,7 +21,6 @@
 
 #include "RN52.h"
 #include "RN52strings.h"
-//#include <iostream>
 #include <string.h>
 
 using namespace std;
@@ -30,13 +29,11 @@ namespace RN52 {
 static int getVal(char c);
 
 RN52driver::RN52driver() : mode(DATA), sppTxBufferPos(0), cmdRxBufferPos(0), a2dpConnected(false), sppConnected(false), streamingAudio(false), state(0), profile(0),enterCommandMode(false),commandQueuePos(0),currentCommand(NULL),enterDataMode(false) {
-//	cout << "RN52driver()" << endl;
 	mode = DATA;
 }
 
 int RN52driver::fromUART(const char c)
 {
-//	cout << "RN52driver::fromUART(" << c << ")" << endl;
 	if (mode == DATA && !enterCommandMode) {
 		fromSPP(&c, 1);
 		return 1;
@@ -48,7 +45,6 @@ int RN52driver::fromUART(const char c)
 
 int RN52driver::fromUART(const char *data, int size)
 {
-//	cout << "RN52driver::fromUART(" << data << "," << size << ")" << endl;
 	if (mode == DATA && !enterCommandMode) {
 		fromSPP(data, size);
 	} else {
@@ -69,7 +65,6 @@ int RN52driver::fromUART(const char *data, int size)
 
 int RN52driver::toSPP(const char c)
 {
-//	cout << "RN52driver::toSPP(" << c << ")" << endl;
 	if(!sppConnected) {
 		onError(2, NOTCONNECTED);
 		return -2;
@@ -92,7 +87,6 @@ int RN52driver::toSPP(const char c)
 
 int RN52driver::toSPP(const char *data, int size)
 {
-//	cout << "RN52driver::toSPP(" << data << "," << size << ")" << endl;
 	if(!sppConnected) {
 		onError(3, NOTCONNECTED);
 		return -2;
@@ -114,7 +108,7 @@ int RN52driver::toSPP(const char *data, int size)
 	return size;
 }
 
-static bool isCmd(char *buffer, const char *cmd) {
+static bool isCmd(const char *buffer, const char *cmd) {
 	return strncmp(buffer, cmd, strlen(cmd)) == 0;
 }
 
@@ -135,7 +129,6 @@ int RN52driver::parseCmdResponse(const char *data, int size)
 					mode = COMMAND;
 					enterCommandMode = false;
 					cmdRxBufferPos = 0;
-//					cout << "RN52: command mode entered" << endl;
 				} else {
 					toSPP(cmdRxBuffer[0]);
 					for (int i=1;i<5;i++)
@@ -150,7 +143,6 @@ int RN52driver::parseCmdResponse(const char *data, int size)
 					mode = DATA;
 					cmdRxBufferPos = 0;
 					enterDataMode = false;
-//					cout << "RN52: command mode left" << endl;
 
 					if (commandQueuePos > 0) {
 						// there's outgoing command requests (yet or again)
@@ -161,11 +153,10 @@ int RN52driver::parseCmdResponse(const char *data, int size)
 				// TODO handle other responses, depending on the command sent before
 				if (currentCommand == NULL) {
 					cmdRxBuffer[cmdRxBufferPos-2] = 0;
-//					cout << "Received line without issued command: " << cmdRxBuffer << endl;
-				} else if (currentCommand == RN52_CMD_QUERY) {
+				} else if (isCmd(currentCommand, RN52_CMD_QUERY)) {
 					parseQResponse(cmdRxBuffer);
 					currentCommand = NULL;
-				} else if (currentCommand == RN52_CMD_DETAILS) {
+				} else if (isCmd(currentCommand, RN52_CMD_DETAILS)) {
 					// multiple lines
 					//TODO set currentCommand to NULL after the 10th line of response
 					currentCommand = NULL;
@@ -179,7 +170,6 @@ int RN52driver::parseCmdResponse(const char *data, int size)
 						// WTF!?
 					} else {
 						cmdRxBuffer[cmdRxBufferPos-2] = 0;
-//						cout << "Received unknown response: " << cmdRxBuffer << endl;
 						onError(4, PROTOCOL);
 						debug("invalid response:");
 						debug(cmdRxBuffer);
@@ -228,7 +218,6 @@ void RN52driver::parseQResponse(const char data[4]) {
 	int state =
 			(getVal(data[2]) << 4 | getVal(data[3])) & 0x0f;
 
-//	cout << "Parsed Q response. Profile: " << profile << ", State: " << state << endl;
 	//profIAPConnected = profile & 0x01;
 	bool lastSppConnected = sppConnected;
 	bool lastA2dpConnected = a2dpConnected;
@@ -267,7 +256,6 @@ void RN52driver::prepareDataMode() {
 
 	if (enterCommandMode) {
 		// command mode was attempted but never reached
-//		cout << "RN52: command mode was attempted but never reached" << endl;
 		enterCommandMode = false;
 	}
 	setMode(DATA);
