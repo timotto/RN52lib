@@ -49,7 +49,7 @@ int RN52driver::fromUART(const char *data, int size)
 		fromSPP(data, size);
 	} else {
 		int parsed = parseCmdResponse(data, size);
-		if (parsed < size) {
+		if (parsed < size && parsed > 0) {
 			// Not all UART bytes were processed by the CommandMode parser.
 			// This means there was an END\r\n, so feed the remainder to SPP
 			if (mode == DATA) {
@@ -70,11 +70,11 @@ int RN52driver::toSPP(const char c)
 		return -2;
 	}
 
-	if (mode == DATA)
+	if (mode == DATA && !enterCommandMode)
 		toUART(&c, 1);
 	else {
 		// in command mode, buffer
-		int left = SPP_TX_BUFFER_SIZE;
+		int left = SPP_TX_BUFFER_SIZE - sppTxBufferPos;
 		if (left < 1) {
 			onError(2, OVERFLOW);
 			return -1;
@@ -92,11 +92,11 @@ int RN52driver::toSPP(const char *data, int size)
 		return -2;
 	}
 
-	if (mode == DATA)
+	if (mode == DATA && !enterCommandMode)
 		toUART(data, size);
 	else {
 		// in command mode, buffer
-		int left = SPP_TX_BUFFER_SIZE;
+		int left = SPP_TX_BUFFER_SIZE - sppTxBufferPos;
 		if (left < size) {
 			onError(3, OVERFLOW);
 			return -1;
