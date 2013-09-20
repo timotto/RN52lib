@@ -182,7 +182,7 @@ int RN52driver::parseCmdResponse(const char *data, int size)
 	}
 	if (mode == COMMAND) {
 		if (currentCommand == NULL) {
-			if (commandQueuePos>0) {
+			if (commandQueuePos>0 && !enterDataMode) {
 				// send next command
 				currentCommand = commandQueue[0];
 				for(int i=1;i<commandQueuePos;i++)
