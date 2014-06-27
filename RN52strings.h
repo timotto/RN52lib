@@ -26,7 +26,7 @@ const char *RN52_CMD_BEGIN = "CMD\r\n";
 const char *RN52_CMD_EXIT = "END\r\n";
 const char *RN52_CMD_QUERY = "Q\r";
 const char *RN52_CMD_DETAILS = "D\r";
-const char *RN52_CMD_RECONNECTLAST = "B,06\r";
+const char *RN52_CMD_RECONNECTLAST = "B,04\r";
 const char *RN52_CMD_DISCONNECT = "K,06\r";
 
 const char* RN52_CMD_RESET = "R,1\r";
